@@ -1,0 +1,15 @@
+# Folder Python
+__pycache__/
+*.pyc
+
+# Virtual Environment
+venv/
+.venv/
+
+# Dependencies yang diinstal di lokal
+.vscode/
+.pytest_cache/
+
+# Docker Volumes & Database
+data/
+*.sqlite

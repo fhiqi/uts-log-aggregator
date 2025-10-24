@@ -1,0 +1,32 @@
+services:
+  log-aggregator:
+    # Menggunakan image yang dibangun dari Dockerfile lokal
+    build: .
+    image: uts-aggregator
+    container_name: log-aggregator
+    # Memetakan port 8080 internal container ke port 8081 host
+    ports:
+      - "8081:8080"
+    # Mempertahankan state SQLite dan metrik
+    volumes:
+      - aggregator_data:/app/data
+    # Command untuk menjalankan FastAPI/Uvicorn
+    command: ["python", "-m", "uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8080"]
+    restart: unless-stopped
+    # [Perubahan Final]: Menghapus healthcheck yang memblokir startup
+
+  log-publisher-simulator:
+    # Menggunakan image aggregator yang sudah memiliki semua dependencies
+    image: uts-aggregator
+    container_name: log-publisher-simulator
+    # Menunggu aggregator siap sebelum mengirim event
+    depends_on:
+      log-aggregator:
+        condition: service_started
+    # Menjalankan script stress test
+    command: ["python", "src/publisher_simulator.py", "http://log-aggregator:8080/publish"]
+    
+# Definisi Named Volume untuk persistensi data SQLite
+volumes:
+  aggregator_data:
+    driver: local
