@@ -12,5 +12,4 @@ Sistem mengadopsi model Eventual Consistency, consumer hanya menjamin bahwa stat
 ### Ordering
 Untuk Log Aggregator, Total Ordering tidak diperlukan. Consumer Worker memproses queue secara FIFO, mempertahankan order pengiriman (delivery order) event dari API, yang cukup untuk tujuan log aggregation non-transaksional.
 
-
-Link youtube: https://youtu.be/35eu5VBKRtc
+Link youtube: https://youtu.be/hhjjgaMTMWk
